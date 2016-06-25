@@ -27327,9 +27327,38 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
+	var BenchStore = __webpack_require__(168);
 	
 	var BenchMap = React.createClass({
 	  displayName: 'BenchMap',
+	  getInitialState: function getInitialState() {
+	    return { benches: BenchStore.all() };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    BenchStore.addListener(this.createMarkers);
+	    var mapDOMNode = ReactDOM.findDOMNode(this.refs.map);
+	    var mapOptions = {
+	      center: { lat: 37.7758, lng: -122.435 }, // this is SF
+	      zoom: 13
+	    };
+	    this.map = new google.maps.Map(mapDOMNode, mapOptions);
+	  },
+	  createMarkers: function createMarkers() {
+	    var _this = this;
+	
+	    console.log('all the benches');
+	    console.log(this.state.benches);
+	    this.state.benches.forEach(function (bench) {
+	      var coords = { lat: bench.lat, lng: bench.lng };
+	
+	      var marker = new google.maps.Marker({
+	        position: coords,
+	        map: _this.map,
+	        title: bench.description
+	      });
+	    });
+	  },
 	  render: function render() {
 	    return React.createElement('div', { className: 'map', ref: 'map' });
 	  }
