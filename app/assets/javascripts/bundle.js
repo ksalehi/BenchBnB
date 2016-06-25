@@ -27236,14 +27236,14 @@
 	    return { benches: BenchStore.all() };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    BenchStore.addListener(this._onChange);
 	    BenchActions.fetchAllBenches();
+	    BenchStore.addListener(this._onChange);
 	  },
 	  _onChange: function _onChange() {
 	    this.setState({ benches: BenchStore.all() });
 	  },
 	  render: function render() {
-	    console.log('index render');
+	    console.log('index render all benches: ');
 	    console.log(this.state.benches);
 	    var benches = this.state.benches;
 	    if (benches.length > 0) {
@@ -27329,6 +27329,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
 	var BenchStore = __webpack_require__(168);
+	var BenchActions = __webpack_require__(191);
 	
 	var BenchMap = React.createClass({
 	  displayName: 'BenchMap',
@@ -27336,7 +27337,8 @@
 	    return { benches: BenchStore.all() };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    BenchStore.addListener(this.createMarkers);
+	    BenchActions.fetchAllBenches();
+	    BenchStore.addListener(this._onChange);
 	    var mapDOMNode = ReactDOM.findDOMNode(this.refs.map);
 	    var mapOptions = {
 	      center: { lat: 37.7758, lng: -122.435 }, // this is SF
@@ -27344,12 +27346,15 @@
 	    };
 	    this.map = new google.maps.Map(mapDOMNode, mapOptions);
 	  },
+	  _onChange: function _onChange() {
+	    this.setState({ benches: BenchStore.all() });
+	  },
 	  createMarkers: function createMarkers() {
 	    var _this = this;
 	
 	    console.log('all the benches');
-	    console.log(this.state.benches);
-	    this.state.benches.forEach(function (bench) {
+	    console.log(this.state.benches[0]);
+	    this.state.benches[0].forEach(function (bench) {
 	      var coords = { lat: bench.lat, lng: bench.lng };
 	
 	      var marker = new google.maps.Marker({
@@ -27360,6 +27365,9 @@
 	    });
 	  },
 	  render: function render() {
+	    if (this.state.benches.length > 0) {
+	      this.createMarkers();
+	    }
 	    return React.createElement('div', { className: 'map', ref: 'map' });
 	  }
 	});
