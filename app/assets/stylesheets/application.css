@@ -1,4 +1,26 @@
 .map {
   width: 500px;
   height: 500px;
+  border: 1px solid black;
+  margin: 50px;
+  float: left;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: transparent;
+}
+
+h1 {
+  text-align: center;
+}
+
+ul {
+  float: left;
+  margin-top: 50px;
+}
+
+ul li {
+  padding: 5px;
+  margin: 5px;
 }

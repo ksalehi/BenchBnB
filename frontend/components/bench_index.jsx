@@ -15,8 +15,6 @@ const BenchIndex = React.createClass({
     this.setState({ benches: BenchStore.all() });
   },
   render(){
-    console.log('index render all benches: ');
-    console.log(this.state.benches);
     let benches = this.state.benches;
     if (benches.length > 0) {
       return (
