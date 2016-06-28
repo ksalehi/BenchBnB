@@ -17,12 +17,13 @@ const BenchIndex = React.createClass({
   render(){
     let benches = this.state.benches;
     if (benches.length > 0) {
+      console.log(benches[0]);
       return (
         <div>
           <ul>
             {
               benches[0].map( bench => {
-                return (<BenchIndexItem bench={bench} key={bench.description} />);
+                return (<BenchIndexItem bench={bench} key={bench.id} />);
               })
             }
           </ul>

@@ -58,7 +58,9 @@
 	var BenchActions = __webpack_require__(192);
 	var Search = __webpack_require__(193);
 	var BenchForm = __webpack_require__(254);
-	
+	var SessionApiUtil = __webpack_require__(257);
+	var SessionActions = __webpack_require__(258);
+	window.sa = SessionActions;
 	var BenchIndex = __webpack_require__(195);
 	
 	var App = React.createClass({
@@ -27388,6 +27390,7 @@
 	  render: function render() {
 	    var benches = this.state.benches;
 	    if (benches.length > 0) {
+	      console.log(benches[0]);
 	      return React.createElement(
 	        'div',
 	        null,
@@ -27395,7 +27398,7 @@
 	          'ul',
 	          null,
 	          benches[0].map(function (bench) {
-	            return React.createElement(BenchIndexItem, { bench: bench, key: bench.description });
+	            return React.createElement(BenchIndexItem, { bench: bench, key: bench.id });
 	          })
 	        )
 	      );
@@ -32533,6 +32536,7 @@
 	
 	var React = __webpack_require__(1);
 	var BenchActions = __webpack_require__(192);
+	var hashHistory = __webpack_require__(197).hashHistory;
 	
 	var BenchForm = React.createClass({
 	  displayName: 'BenchForm',
@@ -32551,12 +32555,13 @@
 	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
 	    var benchData = {
-	      description: this.state.desription,
+	      description: this.state.description,
 	      num_seats: this.state.num_seats,
 	      lat: this.props.location.query.lat,
 	      lng: this.props.location.query.lng
 	    };
 	    BenchActions.createBench(benchData);
+	    hashHistory.push('/');
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -32604,6 +32609,111 @@
 	});
 	
 	module.exports = BenchForm;
+
+/***/ },
+/* 255 */,
+/* 256 */,
+/* 257 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var SessionApiUtil = {
+	  signUp: function signUp(userData, callback) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/users',
+	      data: { user: userData },
+	      dataType: 'JSON',
+	      success: function success(data) {
+	        callback(data);
+	      },
+	      error: function error(data) {
+	        console.log('error');
+	        console.log(data);
+	      }
+	    });
+	  },
+	  logIn: function logIn(userData, callback) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/session',
+	      data: { user: userData },
+	      dataType: 'JSON',
+	      success: function success(data) {
+	        callback(data);
+	      },
+	      error: function error(data) {
+	        console.log('error');
+	        console.log(data);
+	      }
+	    });
+	  },
+	  logOut: function logOut(callback) {
+	    $.ajax({
+	      method: 'DELETE',
+	      url: 'api/session',
+	      dataType: 'JSON',
+	      success: function success(data) {
+	        callback(data);
+	      },
+	      error: function error(data) {
+	        console.log('error');
+	        console.log(data);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = SessionApiUtil;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var AppDispatcher = __webpack_require__(187);
+	var SessionConstants = __webpack_require__(259);
+	var SessionApiUtil = __webpack_require__(257);
+	
+	var SessionActions = {
+	  logIn: function logIn(user) {
+	    SessionApiUtil.logIn(user, SessionActions.receiveCurrentUser);
+	  },
+	  logOut: function logOut() {
+	    SessionApiUtil.logOut(SessionActions.removeCurrentUser);
+	  },
+	  signUp: function signUp(user) {
+	    SessionApiUtil.signUp(user, SessionActions.receiveCurrentUser);
+	  },
+	  receiveCurrentUser: function receiveCurrentUser(user) {
+	    AppDispatcher.dispatch({
+	      actionType: SessionConstants.LOGIN,
+	      currentUser: user
+	    });
+	  },
+	  removeCurrentUser: function removeCurrentUser() {
+	    AppDispatcher.dispatch({
+	      actionType: SessionConstants.LOGOUT
+	    });
+	  }
+	};
+	
+	module.exports = SessionActions;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var SessionConstants = {
+	  LOGOUT: "LOGOUT",
+	  LOGIN: "LOGIN"
+	};
+	
+	module.exports = SessionConstants;
 
 /***/ }
 /******/ ]);

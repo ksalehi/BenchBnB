@@ -1,5 +1,6 @@
 const React = require('react');
 const BenchActions = require('../actions/bench_actions.js');
+const hashHistory = require('react-router').hashHistory;
 
 const BenchForm = React.createClass({
   getInitialState(){
@@ -17,12 +18,13 @@ const BenchForm = React.createClass({
   handleSubmit(e){
     e.preventDefault();
     const benchData = {
-      description: this.state.desription,
+      description: this.state.description,
       num_seats: this.state.num_seats,
       lat: this.props.location.query.lat,
       lng: this.props.location.query.lng
     };
     BenchActions.createBench(benchData);
+    hashHistory.push('/');
   },
   render() {
     return (
