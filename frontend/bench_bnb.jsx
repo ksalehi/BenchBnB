@@ -14,8 +14,9 @@ const Search = require('./components/search.jsx');
 const BenchForm = require('./components/bench_form.jsx');
 const SessionApiUtil = require('./util/session_api_util');
 const SessionActions = require('./actions/session_actions');
-window.sa = SessionActions;
+const LoginForm = require('./components/login_form');
 const BenchIndex = require('./components/bench_index.jsx');
+const SignUpForm = require('./components/sign_up_form');
 
 const App = React.createClass({
   render(){
@@ -31,6 +32,8 @@ const routes = (
   <Route path="/" component={App}>
     <IndexRoute component={Search}/>
     <Route path="benches/new" component={BenchForm}/>
+    <Route path="session/new" component={LoginForm}/>
+    <Route path="users/new" component={SignUpForm}/>
   </Route>
 );
 

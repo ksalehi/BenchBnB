@@ -29,10 +29,12 @@ SessionStore.isUserLoggedIn = function(user) {
 SessionStore.__onDispatch = function(payload) {
   switch(payload.actionType) {
     case SessionConstants.LOGIN:
-      SessionStore._login(payload.user);
+      SessionStore._login(payload.currentUser);
       break;
     case SessionConstants.LOGOUT:
       SessionStore._logout();
       break;
   }
 };
+
+module.exports = SessionStore;

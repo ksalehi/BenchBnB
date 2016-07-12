@@ -1,45 +1,36 @@
 const SessionApiUtil = {
-  signUp(userData, callback) {
+  signUp(userData, successCB, errorCB) {
     $.ajax({
       method: 'POST',
       url: 'api/users',
-      data: { user: userData },
+      data: { userData },
       dataType: 'JSON',
-      success(data) {
-        callback(data);
-      },
-      error(data) {
-        console.log('error');
-        console.log(data);
+      success: successCB,
+      error(response){
+        errorCB("signup", response.responseText);
       }
     });
   },
-  logIn(userData, callback) {
+  logIn(userData, successCB, errorCB) {
     $.ajax({
       method: 'POST',
       url: 'api/session',
-      data: { user: userData },
+      data: { userData },
       dataType: 'JSON',
-      success(data) {
-        callback(data);
-      },
-      error(data) {
-        console.log('error');
-        console.log(data);
+      success: successCB,
+      error(response){
+        errorCB("login", response.responseText);
       }
     });
   },
-  logOut(callback) {
+  logOut(successCB, errorCB) {
     $.ajax({
       method: 'DELETE',
       url: 'api/session',
       dataType: 'JSON',
-      success(data) {
-        callback(data);
-      },
-      error(data) {
-        console.log('error');
-        console.log(data);
+      success: successCB,
+      error(response){
+        errorCB("logout", response.responseText);
       }
     });
   }

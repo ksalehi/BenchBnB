@@ -17,15 +17,19 @@ const BenchMap = React.createClass({
     this.map = new google.maps.Map(mapDOMNode, mapOptions);
     this.registerListeners();
   },
+  componentWillUnmount(){
+    this.clickListener.remove();
+    this.idleListener.remove();
+  },
   _onChange(){
     this.setState({ benches: BenchStore.all() });
   },
   registerListeners(){
-    this.map.addListener('click', (me) => {
+    this.clickListener = this.map.addListener('click', (me) => {
       let coords = {lat: me.latLng.lat(), lng: me.latLng.lng()};
       this.handleClick(coords);
     });
-    this.map.addListener('idle', () => {
+    this.idleListener = this.map.addListener('idle', () => {
       BenchActions.fetchAllBenches(this._onChange)
     });
     BenchStore.addListener(this._onChange);
